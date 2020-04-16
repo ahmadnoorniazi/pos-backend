@@ -1,14 +1,14 @@
-import { Router } from "express";
-import controller from "./user.controller";
+import { Router } from 'express'
+import controller from './user.controller'
+const router = Router()
 
-const router = Router();
 
-router.route("/create").post(controller.create);
+router.route('/create').post(controller.create)
 
-router.route("/all").get(controller.getAll);
+router.route('/all').get(controller.getAll)
 
-router.route("/update/:id").put(controller.update);
+router.route('/update/:id').put(controller.update)
 
-router.route("/remove/:id").delete(controller.remove);
+router.route('/remove/:id').delete(controller.remove)
 
-export default router;
+export default router

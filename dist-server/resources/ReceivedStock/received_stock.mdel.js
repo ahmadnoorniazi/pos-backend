@@ -13,37 +13,34 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var jwt = require("jsonwebtoken");
 
-var BillingSchema = new _mongoose.default.Schema({
-  total_sale_price: {
-    type: Number
+var ReceivedStock = new _mongoose.default.Schema({
+  product_name: {
+    type: String,
+    required: true
   },
-  total_actual_price: {
-    type: Number
+  product_price: {
+    type: Number,
+    required: true
   },
-  items: [{
-    name: {
-      type: String
-    },
-    quantity: {
-      type: Number
-    },
-    sale_price: {
-      type: Number
-    },
-    actual_price: {
-      type: Number
-    },
-    type: {
-      type: String
-    }
-  }],
+  product_quantity: {
+    type: Number,
+    required: true
+  },
+  product_id: {
+    type: String,
+    required: true
+  },
+  total_bill_amount: {
+    type: Number,
+    required: true
+  },
   time: {
     type: Date,
     default: Date.now
   }
 });
 
-var Billing = _mongoose.default.model("billing", BillingSchema);
+var ReceivedStocks = _mongoose.default.model("received_stock", ReceivedStock);
 
-var _default = Billing;
+var _default = ReceivedStocks;
 exports.default = _default;

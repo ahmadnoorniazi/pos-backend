@@ -1,69 +1,91 @@
-import jwt from "jsonwebtoken";
-import User from "../resources/user/user.model";
+import config from '../config'
+import User from '../resources/user/user.model'
+import jwt from 'jsonwebtoken'
 
 export const newToken = user => {
-  return jwt.sign({ id: user.id, role: user.role }, process.env.jwt, {
-    expiresIn: process.env.jwtExp
-  });
-};
+  return jwt.sign({ id: user.id }, config.secrets.jwt, {
+    expiresIn: config.secrets.jwtExp
+  })
+}
 
 export const verifyToken = token =>
   new Promise((resolve, reject) => {
-    jwt.verify(token, process.env.jwt, (err, payload) => {
-      if (err) return reject(err);
-      resolve(payload);
-    });
-  });
+    jwt.verify(token, config.secrets.jwt, (err, payload) => {
+      if (err) return reject(err)
+      resolve(payload)
+    })
+  })
+
+
+export const signup = async (req, res) => {
+  if (!req.body.email || !req.body.password) {
+    return res.status(400).send({ message: 'need email and password' })
+  }
+
+  try {
+    const user = await User.create({...req.body, image: req.file.path})
+    const token = newToken(user)
+    return res.status(201).json({user, token })
+  } catch (e) {
+    return res.send(e).status(500).end()
+  }
+}
 
 export const signin = async (req, res) => {
   if (!req.body.email || !req.body.password) {
-    return res.status(400).send({ message: "need email and password" });
+    return res.status(400).send({ message: 'need email and password' })
   }
 
-  const invalid = { message: "Invalid email and passoword combination" };
+  const invalid = { message: 'Invalid email and passoword combination' }
 
   try {
-    const user = await User.findOne({ email: req.body.email }).exec();
+    const user = await User.findOne({ email: req.body.email })
+      .exec()
+
     if (!user) {
-      return res.status(401).send(invalid);
-    }
-    const match = await user.checkPassword(user, req.body.password);
-    if (!match) {
-      return res.status(401).send(invalid);
+      return res.status(401).send(invalid)
     }
 
-    const token = newToken(user);
-    return res.status(201).send({ token, role: user.role, email: user.email });
+    const match = await user.checkPassword(req.body.password)
+
+    if (!match) {
+      return res.status(401).send(invalid)
+    }
+
+    const token = newToken(user)
+    return res.status(201).send({user, token })
   } catch (e) {
-    console.error(e);
-    console.log('eeeeeee',e)
-    res.send({error:e}).end();
+    console.error(e)
+    res.status(500).end()
   }
-};
+}
+
 
 export const protect = async (req, res, next) => {
-  const bearer = req.headers.authorization;
+  const bearer = req.headers.authorization
 
-  if (!bearer || !bearer.startsWith("Bearer ")) {
-    return res.status(401).end();
+  if (!bearer || !bearer.startsWith('Bearer ')) {
+    return res.status(401).end("unathenticated user")
   }
 
-  const token = bearer.split("Bearer ")[1].trim();
-  let payload;
+  const token = bearer.split('Bearer ')[1].trim()
+  let payload
   try {
-    payload = await verifyToken(token);
+    payload = await verifyToken(token)
   } catch (e) {
-    return res.status(401).end();
+    return res.status(401).end()
   }
+
   const user = await User.findById(payload.id)
-    .select("-password")
+    .select('-password')
     .lean()
-    .exec();
+    .exec()
 
   if (!user) {
-    return res.status(401).end();
+    return res.status(401).end()
   }
 
-  req.user = user;
-  next();
-};
+  req.user = user
+  next()
+}
+

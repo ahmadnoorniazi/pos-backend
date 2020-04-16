@@ -52,7 +52,7 @@ const BillingSchema = new mongoose.Schema({
       }
     }
   ],
-  time : { type : Date, default: new Date("2020-03-29T08:00:00Z")}
+  time : { type : Date, default: new Date('2020-04-06T18:59:59.999Z')}
 });
 
 const Billing = mongoose.model("billing", BillingSchema);

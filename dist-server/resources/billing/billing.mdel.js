@@ -63,7 +63,7 @@ var BillingSchema = new _mongoose.default.Schema({
   }],
   time: {
     type: Date,
-    default: Date.now
+    default: new Date('2020-04-06T18:59:59.999Z')
   }
 });
 

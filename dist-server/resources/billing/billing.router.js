@@ -13,9 +13,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var router = (0, _express.Router)();
 router.route("/create").post(_billing.default.createBill);
-router.route("/all").get(_billing.default.getAll); // router.route("/filter/:search").get(controller.filter);
-// router.route("/update/:id").put(controller.update);
-// router.route("/remove/:id").delete(controller.remove);
-
+router.route("/all").get(_billing.default.getAll);
+router.route("/filter/:startDate/:endDate").get(_billing.default.filterBillByDate);
+router.route("/update/:id").put(_billing.default.update);
+router.route("/remove/:id").delete(_billing.default.remove);
+router.route("/getAllSale").get(_billing.default.getSalesData);
+router.route("/getWeeklySale").get(_billing.default.filterWeekly);
+router.route("/getMonthly").get(_billing.default.filterMonthly);
+router.route("/getUnpaidBills").get(_billing.default.getUnpaidBills);
 var _default = router;
 exports.default = _default;

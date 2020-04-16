@@ -3,6 +3,14 @@ import bcrypt from "bcryptjs";
 const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema({
+  firstname: {
+    type: String,
+    required: true,
+  },
+  lastname: {
+    type: String,
+    required: true,
+  },
   email: {
     type: String,
     unique: true,
@@ -13,40 +21,40 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  token: {
-    type: String
+  shopname: {
+    type: String,
+    required: true
   },
+  image: { type: String, required: true}
 });
 
-userSchema.methods.checkPassword = async (user, password) => {
-  try {
-    const same = await bcrypt.compare(password, user.password);
-    return same;
-  } catch (e) {
-    return e.message;
+userSchema.pre('save', function(next) {
+  if (!this.isModified('password')) {
+    return next()
   }
-};
 
-//hooks
-userSchema.pre("save", function(next) {
-  var user = this;
-  if (user.isModified("password")) {
-    bcrypt.hash(user.password, 8, function(err, hash) {
-      if (err) return next(err);
-      user.password = hash;
-      next();
-    });
-  }
-});
+  bcrypt.hash(this.password, 8, (err, hash) => {
+    if (err) {
+      return next(err)
+    }
 
-//Instance method
-userSchema.methods.generateAuthToken = async function() {
-  const user = this;
-  const token = jwt.sign({ _id: user._id.toString() }, "mobileLIVE");
-  user.token = token;
-  await user.save();
-  return token;
-};
+    this.password = hash
+    next()
+  })
+})
+
+userSchema.methods.checkPassword = function(password) {
+  const passwordHash = this.password
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(password, passwordHash, (err, same) => {
+      if (err) {
+        return reject(err)
+      }
+
+      resolve(same)
+    })
+  })
+}
 
 const User = mongoose.model("user", userSchema);
 
