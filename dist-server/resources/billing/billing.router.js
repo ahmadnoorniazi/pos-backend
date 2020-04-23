@@ -21,5 +21,6 @@ router.route("/getAllSale").get(_billing.default.getSalesData);
 router.route("/getWeeklySale").get(_billing.default.filterWeekly);
 router.route("/getMonthly").get(_billing.default.filterMonthly);
 router.route("/getUnpaidBills").get(_billing.default.getUnpaidBills);
+router.route("/testingFilter").get(_billing.default.testingFilter);
 var _default = router;
 exports.default = _default;

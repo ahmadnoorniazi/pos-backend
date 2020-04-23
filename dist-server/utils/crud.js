@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.crudControllers = exports.filterMonthly = exports.filterWeekly = exports.createStock = exports.filterBillByDate = exports.createBill = exports.create = void 0;
+exports.crudControllers = exports.testingFilter = exports.filterMonthly = exports.filterWeekly = exports.createStock = exports.filterBillByDate = exports.createBill = exports.create = void 0;
 
 var _dateformat = _interopRequireDefault(require("dateformat"));
 
@@ -225,15 +225,15 @@ function updateAllProduct(_x9, _x10) {
 }
 
 function _updateAllProduct() {
-  _updateAllProduct = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13(availableStockModel, list) {
+  _updateAllProduct = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14(availableStockModel, list) {
     var i, _list$i, quantity, _id, getStock, quantity_received, remaining_quantity, _id2, product_name, product_id, updateRemainingQuantity, updateStock, updatedUser;
 
-    return regeneratorRuntime.wrap(function _callee13$(_context13) {
+    return regeneratorRuntime.wrap(function _callee14$(_context14) {
       while (1) {
-        switch (_context13.prev = _context13.next) {
+        switch (_context14.prev = _context14.next) {
           case 0:
             if (!(Array.isArray(list) && list.length > 0)) {
-              _context13.next = 17;
+              _context14.next = 17;
               break;
             }
 
@@ -241,21 +241,21 @@ function _updateAllProduct() {
 
           case 2:
             if (!(i < list.length)) {
-              _context13.next = 17;
+              _context14.next = 17;
               break;
             }
 
             _list$i = list[i], quantity = _list$i.quantity, _id = _list$i._id;
-            _context13.next = 6;
+            _context14.next = 6;
             return availableStockModel.findOne({
               product_id: _id
             }).exec();
 
           case 6:
-            getStock = _context13.sent;
+            getStock = _context14.sent;
 
             if (!(getStock && Object.keys(getStock).length > 0 && getStock.product_name)) {
-              _context13.next = 14;
+              _context14.next = 14;
               break;
             }
 
@@ -268,7 +268,7 @@ function _updateAllProduct() {
               remaining_quantity: updateRemainingQuantity >= 0 ? updateRemainingQuantity : 0,
               isLow: updateRemainingQuantity > 20 ? false : true
             };
-            _context13.next = 13;
+            _context14.next = 13;
             return availableStockModel.findByIdAndUpdate({
               _id: _id2
             }, updateStock, {
@@ -276,19 +276,19 @@ function _updateAllProduct() {
             }).exec();
 
           case 13:
-            updatedUser = _context13.sent;
+            updatedUser = _context14.sent;
 
           case 14:
             i++;
-            _context13.next = 2;
+            _context14.next = 2;
             break;
 
           case 17:
           case "end":
-            return _context13.stop();
+            return _context14.stop();
         }
       }
-    }, _callee13);
+    }, _callee14);
   }));
   return _updateAllProduct.apply(this, arguments);
 }
@@ -376,24 +376,23 @@ var filterBillByDate = function filterBillByDate(model) {
 
               case 4:
                 users = _context6.sent;
-                console.log('usersssssssss', users);
                 res.status(200).json(users);
-                _context6.next = 12;
+                _context6.next = 11;
                 break;
 
-              case 9:
-                _context6.prev = 9;
+              case 8:
+                _context6.prev = 8;
                 _context6.t0 = _context6["catch"](0);
                 res.status(400).send({
                   error: _context6.t0.message
                 });
 
-              case 12:
+              case 11:
               case "end":
                 return _context6.stop();
             }
           }
-        }, _callee6, null, [[0, 9]]);
+        }, _callee6, null, [[0, 8]]);
       }));
 
       return function (_x13, _x14) {
@@ -666,8 +665,7 @@ var filterWeekly = function filterWeekly(model) {
                 m = (0, _moment.default)();
                 start = m.startOf('week').startOf('day').toDate();
                 endOfStart = m.endOf('week').endOf('day').toDate();
-                console.log('lolololol', endOfStart);
-                _context11.next = 7;
+                _context11.next = 6;
                 return model.aggregate([//match will get all sale_items of the week with respect to start and endDate
                 {
                   $match: {
@@ -696,25 +694,25 @@ var filterWeekly = function filterWeekly(model) {
                   }
                 }]);
 
-              case 7:
+              case 6:
                 result = _context11.sent;
                 res.status(200).json(result);
-                _context11.next = 14;
+                _context11.next = 13;
                 break;
 
-              case 11:
-                _context11.prev = 11;
+              case 10:
+                _context11.prev = 10;
                 _context11.t0 = _context11["catch"](0);
                 res.status(400).send({
                   error: _context11.t0.message
                 });
 
-              case 14:
+              case 13:
               case "end":
                 return _context11.stop();
             }
           }
-        }, _callee11, null, [[0, 11]]);
+        }, _callee11, null, [[0, 10]]);
       }));
 
       return function (_x23, _x24) {
@@ -778,6 +776,52 @@ var filterMonthly = function filterMonthly(model) {
 
 exports.filterMonthly = filterMonthly;
 
+var testingFilter = function testingFilter(model) {
+  return (/*#__PURE__*/function () {
+      var _ref13 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13(req, res) {
+        var users;
+        return regeneratorRuntime.wrap(function _callee13$(_context13) {
+          while (1) {
+            switch (_context13.prev = _context13.next) {
+              case 0:
+                _context13.prev = 0;
+                _context13.next = 3;
+                return model.find({
+                  total_sale_price: {
+                    $in: [562]
+                  }
+                });
+
+              case 3:
+                users = _context13.sent;
+                res.status(200).json(users);
+                _context13.next = 10;
+                break;
+
+              case 7:
+                _context13.prev = 7;
+                _context13.t0 = _context13["catch"](0);
+                res.status(400).send({
+                  error: _context13.t0.message
+                });
+
+              case 10:
+              case "end":
+                return _context13.stop();
+            }
+          }
+        }, _callee13, null, [[0, 7]]);
+      }));
+
+      return function (_x27, _x28) {
+        return _ref13.apply(this, arguments);
+      };
+    }()
+  );
+};
+
+exports.testingFilter = testingFilter;
+
 var crudControllers = function crudControllers(model, second) {
   return {
     getAll: getAll(model),
@@ -791,7 +835,8 @@ var crudControllers = function crudControllers(model, second) {
     createStock: createStock(model, second),
     filterWeekly: filterWeekly(model),
     filterMonthly: filterMonthly(model),
-    getUnpaidBills: getUnpaidBills(model)
+    getUnpaidBills: getUnpaidBills(model),
+    testingFilter: testingFilter(model)
   };
 };
 

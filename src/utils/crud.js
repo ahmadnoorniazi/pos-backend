@@ -135,7 +135,6 @@ export const filterBillByDate = model => async (req, res) => {
     const users = await model
       .find({ time: { $gte: `${startDate}`, $lte: `${endDate}` } })
       .exec()
-    console.log('usersssssssss', users)
     res.status(200).json(users)
   } catch (e) {
     res.status(400).send({
@@ -251,7 +250,6 @@ export const filterWeekly = model => async (req, res) => {
       .endOf('week')
       .endOf('day')
       .toDate()
-    console.log('lolololol', endOfStart)
     const result = await model.aggregate([
       //match will get all sale_items of the week with respect to start and endDate
       { $match: { $or: [{ time: { $gte: start, $lt: endOfStart } }] } },
@@ -299,6 +297,17 @@ export const filterMonthly = model => async (req, res) => {
   }
 }
 
+export const testingFilter = model => async (req, res) => {
+  try {
+    const users = await model.find({total_sale_price: {$in: [562]}})
+    res.status(200).json(users)
+  } catch (e) {
+    res.status(400).send({
+      error: e.message
+    })
+  }
+}
+
 export const crudControllers = (model, second) => ({
   getAll: getAll(model),
   create: create(model),
@@ -311,5 +320,6 @@ export const crudControllers = (model, second) => ({
   createStock: createStock(model, second),
   filterWeekly: filterWeekly(model),
   filterMonthly: filterMonthly(model),
-  getUnpaidBills: getUnpaidBills(model)
+  getUnpaidBills: getUnpaidBills(model),
+  testingFilter: testingFilter(model)
 })

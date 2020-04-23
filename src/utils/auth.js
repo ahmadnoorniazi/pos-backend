@@ -43,13 +43,13 @@ export const signin = async (req, res) => {
       .exec()
 
     if (!user) {
-      return res.status(401).send(invalid)
+      return res.status(400).send(invalid)
     }
 
     const match = await user.checkPassword(req.body.password)
 
     if (!match) {
-      return res.status(401).send(invalid)
+      return res.status(400).send(invalid)
     }
 
     const token = newToken(user)

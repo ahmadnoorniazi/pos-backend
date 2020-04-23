@@ -12,7 +12,6 @@ router.route("/getAllSale").get(controller.getSalesData);
 router.route("/getWeeklySale").get(controller.filterWeekly);
 router.route("/getMonthly").get(controller.filterMonthly);
 router.route("/getUnpaidBills").get(controller.getUnpaidBills);
-
-
+router.route("/testingFilter").get(controller.testingFilter);
 
 export default router;

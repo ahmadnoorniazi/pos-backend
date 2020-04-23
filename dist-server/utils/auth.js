@@ -129,7 +129,7 @@ var signin = /*#__PURE__*/function () {
               break;
             }
 
-            return _context2.abrupt("return", res.status(401).send(invalid));
+            return _context2.abrupt("return", res.status(400).send(invalid));
 
           case 9:
             _context2.next = 11;
@@ -143,7 +143,7 @@ var signin = /*#__PURE__*/function () {
               break;
             }
 
-            return _context2.abrupt("return", res.status(401).send(invalid));
+            return _context2.abrupt("return", res.status(400).send(invalid));
 
           case 14:
             token = newToken(user);
